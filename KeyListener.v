@@ -18,10 +18,10 @@ begin
 		key_released <= 4'd0;
 	end
 	else begin
-		key_pressed <= KEY & (~prev_state);
-		key_held <= KEY;
-		key_released <= (~KEY) & prev_state;
-		prev_state <= KEY;
+		key_pressed <= ~KEY & (~prev_state);
+		key_held <= ~KEY;
+		key_released <= KEY & prev_state;
+		prev_state <= ~KEY;
 	end
 end
 	
