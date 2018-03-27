@@ -189,21 +189,21 @@ module RenderDataPath (
 		if (key1_en) begin
 			cur_key = keys[19:16];
 			key_y = 9'd0;
-			cur_key_height = height - yoffset;
+			cur_key_height = key_height - height + yoffset; // key_height - (height - yoffset)
 		end
 		else if (key2_en) begin
 			cur_key = keys[15:12];
-			key_y = height - yoffset;
+			key_y = yoffset - 3*key_height;
 			cur_key_height = key_height;
 		end
 		else if (key3_en) begin
 			cur_key = keys[11:8];
-			key_y = key_height + height - yoffset;
+			key_y = yoffset - 2*key_height;
 			cur_key_height = key_height;
 		end
 		else if (key4_en) begin
 			cur_key = keys[7:4];
-			key_y = 2 * key_height + height - yoffset;
+			key_y = yoffset - key_height;
 			cur_key_height = key_height;
 			if (num_hit == 2'd2) begin
 				key_color = GREY;
@@ -214,7 +214,7 @@ module RenderDataPath (
 		end
 		else if (key5_en) begin
 			cur_key = keys[3:0];
-			key_y = 3 * key_height + height - yoffset;
+			key_y = yoffset;
 			cur_key_height = height - yoffset;
 			if (num_hit > 2'd0) begin
 				key_color = GREY;
