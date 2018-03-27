@@ -64,7 +64,7 @@ module RenderingEngine(
 	);
 	
 	// Key renderer
-	wire [8:0] kr_x, kr_y, kr_key; 
+	wire [8:0] kr_x, kr_y, kr_key, kr_height; 
 	wire kr_done;
 	KeyRenderer kr(
 		.clk(clk),
@@ -140,9 +140,32 @@ module RenderingEngine(
 		.done(done)
 	);
 	
-	// TODO
 	// RenderDataPath
-	
+	RenderDataPath rdp(
+		.sc_en(sc_en),
+		.vlr_en(vlr_en),
+		.hlr_en(hlr_en),
+		.key1_en(kr_en), .key2_en(key2_en), .key3_en(key3_en), .key4_en(key4_en), .key5_en(key5_en),
+		.hbr_en(hbr_en),
+		.dr_en(dr_en),
+		.sc_en(sc_en),
+		.keys(keys),
+		.height(HEIGHT),
+		.key_height(Y_SPACING),
+		.yoffset(yoffset),
+		.sc_x(sc_x), .sc_y(sc_y),
+		.vlr_x(vlr_x), .vlr_y(vlr_y),
+		.hlr_x(hlr_x), .hlr_y(hlr_y),
+		.kr_x(kr_x), .kr_y(kr_y),
+		.hbr_x(hbr_x), .hbr_y(hbr_y),
+		.dr_x(dr_x), .dr_y(dr_y),
+		.dr_color(dr_color),
+		.num_hit(num_hit),
+		.x(x), .y(y),
+		.color(color),
+		.cur_key_height(kr_height),
+		.cur_key(kr_key)
+	);
 
 endmodule
 
@@ -150,7 +173,7 @@ module RenderDataPath (
 	input sc_en, vlr_en, hlr_en, kr_en, key1_en, key2_en, key3_en, key4_en, key5_en, hbr_en, lds_en, dr_en,
 	input [19:0] keys,
 	input [8:0] height, key_height, yoffset, 
-	input [8:0] sc_x, sc_y, vlr_x, vlr_y, hlr_x, hlr_y, kr_x, kr_y, kr_key, hbr_x, hbr_y, dr_x, dr_y, dr_color,
+	input [8:0] sc_x, sc_y, vlr_x, vlr_y, hlr_x, hlr_y, kr_x, kr_y, hbr_x, hbr_y, dr_x, dr_y, dr_color,
 	input [1:0] num_hit, 
 	output reg [8:0] x, y, color, cur_key_height,
 	output reg [3:0] cur_key
@@ -163,22 +186,22 @@ module RenderDataPath (
 	// Key position selector
 	reg [8:0] key_y, key_color;
 	always @(*) begin
-		if (key_1) begin
+		if (key1_en) begin
 			cur_key = keys[19:16];
 			key_y = 9'd0;
 			cur_key_height = height - yoffset;
 		end
-		else if (key_2) begin
+		else if (key2_en) begin
 			cur_key = keys[15:12];
 			key_y = height - yoffset;
 			cur_key_height = key_height;
 		end
-		else if (key_3) begin
+		else if (key3_en) begin
 			cur_key = keys[11:8];
 			key_y = key_height + height - yoffset;
 			cur_key_height = key_height;
 		end
-		else if (key_4) begin
+		else if (key4_en) begin
 			cur_key = keys[7:4];
 			key_y = 2 * key_height + height - yoffset;
 			cur_key_height = key_height;
@@ -189,7 +212,7 @@ module RenderDataPath (
 				key_color = BLACK;
 			end
 		end
-		else if (key_5) begin
+		else if (key5_en) begin
 			cur_key = keys[3:0];
 			key_y = 3 * key_height + height - yoffset;
 			cur_key_height = height - yoffset;
