@@ -42,6 +42,7 @@ module pianotiles(
 	GameStateManager gsm(
 		.clk(CLOCK_50),
 		.resetn(SW[9]),
+		.KEY(KEY),
 		.x(x),
 		.y(y),
 		.color(colour),

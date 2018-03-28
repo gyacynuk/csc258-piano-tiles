@@ -1,12 +1,34 @@
 `include "RenderingEngine.v"
 `include "LogicEngine.v"
 `include "SongLookupUnit.v"
+`include "KeyListener.v"
 
 module GameStateManager(
 	input clk, resetn,
+	input [3:0] KEY,
 	output [8:0] x, y, color, 
 	output draw_en
 );
+	
+	// Key Listener
+	wire [3:0] key_pressed, key_held, key_released;
+	KeyListener kl (
+		.clk(clk),
+		.resetn(resetn),
+		.KEY(KEY),
+		.key_pressed(key_pressed),
+		.key_held(key_held),
+		.key_released(key_released)
+	);
+
+
+	// Song Lookup unit
+	SongLookupUnit slu(
+		.clk(clk),
+		.resetn(resetn),
+		.key_pressed(key_pressed),
+		.song(song_in)
+	);
 
 	// Logic Engine
 	wire logic_en, logic_done, logic_done_cycle, won_flag_out, lost_flag_out;
