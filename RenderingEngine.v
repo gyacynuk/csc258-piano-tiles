@@ -7,7 +7,7 @@ module RenderingEngine(
 	input [8:0] yoffset, 	// y distance of bottom most key from the TOP of the screen
 	input [1:0] num_hit,    // number of keys correctly played currently on screen
 	input [9:0] score,		// player score
-	output reg [9:0] x, y,
+	output reg [8:0] x, y,
 	output reg [8:0] color,
 	output reg done
 );
